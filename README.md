@@ -2,7 +2,7 @@
 
 This repository contains a PEG grammar for parsing the [`d` attribute](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d) of `path`s in SVGs.
 
-The parser tries to be as close as possible to the [SVG spec](ihttps://www.w3.org/TR/SVG2/paths.html), but I don't know if it's fully standards-compliant.
+The parser tries to be as close as possible to the [SVG spec](https://www.w3.org/TR/SVG2/paths.html), but I don't know if it's fully standards-compliant.
 
 The parser is also not validating the path in any way. It doesn't check for paths starting with a `move to` command, for example. It doesn't process the path in any way either, leaving everything as it is. All other processing is left up to the user.
 
