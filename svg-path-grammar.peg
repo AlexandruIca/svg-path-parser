@@ -1,0 +1,153 @@
+Path = CmdPrimitive*
+
+CmdPrimitive
+  = _
+  cmd:( MoveTo
+  / ClosePath
+  / LineTo
+  / HorizontalTo
+  / VerticalTo
+  / QuadraticTo
+  / SmoothQuadraticTo
+  / CubicTo
+  / SmoothCubicTo
+  / ArcTo
+  ) _
+  { return cmd; }
+
+MoveTo
+  = cmd:[mM] data:SomeCoordinatePairs
+  { return { cmd, data }; }
+
+ClosePath
+  = [zZ]
+  { return { cmd: 'Z' }; }
+
+LineTo
+  = cmd:[lL] data:SomeCoordinatePairs
+  { return { cmd, data }; }
+
+HorizontalTo
+  = cmd:[hH] data:SomeCoordinates
+  { return { cmd, data }; }
+
+VerticalTo
+  = cmd:[vV] data:SomeCoordinates
+  { return { cmd, data }; }
+
+QuadraticTo
+  = cmd:[qQ] data:SomeCoordinateDoubles
+  { return { cmd, data }; }
+
+SmoothQuadraticTo
+  = cmd:[tT] data:SomeCoordinatePairs
+  { return { cmd, data }; }
+
+CubicTo
+  = cmd:[cC] data:SomeCoordinateTriples
+  { return { cmd, data }; }
+
+SmoothCubicTo
+  = cmd:[sS] data:SomeCoordinateDoubles
+  { return { cmd, data }; }
+
+ArcTo
+  = cmd:[aA] data:(CoordinatePair Comma AxisRotation Comma LargeArc Comma SweepFlag Comma CoordinatePair)+
+  {
+    const arcData = data.reduce((result, element) => {
+      const radius = element[0];
+      const rotation = element[2];
+      const largeArc = element[4];
+      const sweepFlag = element[6];
+      const to = element[8];
+      
+      result.push({ radius, rotation, largeArc, sweepFlag, to });
+      return result;
+    }, []);
+    
+    return { cmd, data: arcData };
+  }
+
+Coordinate
+  = _ n:Number _
+  { return n; }
+
+CoordinatePair
+  = x:Coordinate Comma y:Coordinate
+  { return { x, y }; }
+
+CoordinateDouble
+  = first:CoordinatePair Comma second:CoordinatePair
+  { return { first, second }; }
+
+CoordinateTriple
+  = first:CoordinatePair Comma second:CoordinatePair Comma third:CoordinatePair
+  { return { first, second, third }; }
+
+AxisRotation = Number
+LargeArc     = "0" / "1"
+SweepFlag    = "0" / "1"
+
+SomeCoordinates
+  = data:(Coordinate Comma)+
+  {
+  	return data.reduce((result, element) => {
+      result.push(element[0])
+      return result;
+    }, []);
+  }
+
+SomeCoordinatePairs
+  = data:(CoordinatePair Comma)+
+  {
+    return data.reduce((result, element) => {
+      result.push(element[0]);
+      return result;
+    }, []);
+  }
+
+SomeCoordinateDoubles
+  = data:(CoordinateDouble Comma)+
+  {
+    return data.reduce((result, element) => {
+      result.push(element[0]);
+      return result;
+    }, []);
+  }
+
+SomeCoordinateTriples
+  = data:(CoordinateTriple Comma)+
+  {
+    return data.reduce((result, element) => {
+      result.push(element[0]);
+      return result;
+    }, []);
+  }
+
+Number
+  = parts:(Sign? FloatConstant / Sign? DigitSequence)
+  { return parts.join('') * 1; }
+
+FloatConstant
+  = parts:(FractionalConstant Exponent? / DigitSequence Exponent)
+  { return parts.join(''); }
+
+FractionalConstant
+  = parts:(DigitSequence? '.' DigitSequence / DigitSequence '.')
+  { return parts.join(''); }
+
+Exponent
+  = parts:([eE] Sign? DigitSequence)
+  { return parts.join(''); }
+
+Sign
+  = [+-]
+
+DigitSequence
+  = digits:[0-9]+
+    { return digits.join(''); }
+
+Comma = _ ","? _
+
+_ "whitespace"
+  = [ \t\n\r]*
