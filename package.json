@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "devDependencies": {
+    "peggy": "^4.0.2"
+  }
+}
