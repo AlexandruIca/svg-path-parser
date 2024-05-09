@@ -91,7 +91,7 @@ SweepFlag    = "0" / "1"
 SomeCoordinates
   = data:(Coordinate Comma)+
   {
-  	return data.reduce((result, element) => {
+    return data.reduce((result, element) => {
       result.push(element[0])
       return result;
     }, []);
