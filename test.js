@@ -2,7 +2,7 @@ import { describe, it } from 'node:test';
 import assert from 'assert';
 import { parse } from './svg-path-grammar.js';
 
-const expect = (path, expected) => { ; return assert.deepStrictEqual(parse(path), expected); };
+const expect = (path, expected) => assert.deepStrictEqual(parse(path), expected);
 
 describe('Basics of drawing commands', () => {
   it('Close', () => {
