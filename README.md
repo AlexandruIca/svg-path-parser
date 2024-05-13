@@ -40,6 +40,12 @@ parse('M433.601,67.001c-24.7-24.7-57.4-38.2-92.3-38.2s-67.7,13.6-92.4,38.3l-12.9
 
 You can also check out the [tests](./test.js) to see more examples.
 
+There are existing solutions already, but I wanted to create my own because:
+
+- I wanted something that doesn't alter the input in any way.
+- I wanted something that doesn't validate the path itself when parsing (things like checking for `M`/`m` at the beginning).
+- It's fun.
+
 # Building the parser
 
 ```
